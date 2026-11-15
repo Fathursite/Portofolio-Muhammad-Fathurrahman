@@ -165,15 +165,54 @@
   $$('a', sheet).forEach(function (a) { a.addEventListener('click', function () { toggleSheet(false); }); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') toggleSheet(false); });
 
-  /* ===== FILTER SERTIFIKAT ===== */
-  var fbtns = $$('.certs-filter button'), cards = $$('.cc');
+  /* ===== FILTER + CARI SERTIFIKAT ===== */
+  var fbtns = $$('.certs-filter button'), cards = $$('.cc'), sInput = $('#certSearch'), sEmpty = $('#certEmpty'), curF = 'all';
+  function applyCerts() {
+    var q = sInput.value.trim().toLowerCase(), n = 0;
+    cards.forEach(function (c) {
+      var ok = (curF === 'all' || c.dataset.c === curF) && (!q || c.dataset.q.indexOf(q) > -1);
+      c.classList.toggle('hide', !ok); if (ok) n++;
+    });
+    sEmpty.hidden = n > 0;
+  }
   fbtns.forEach(function (b) {
     b.addEventListener('click', function () {
       fbtns.forEach(function (x) { x.classList.remove('on'); x.setAttribute('aria-pressed', 'false'); });
-      b.classList.add('on'); b.setAttribute('aria-pressed', 'true');
-      cards.forEach(function (c) { c.classList.toggle('hide', b.dataset.f !== 'all' && c.dataset.c !== b.dataset.f); });
+      b.classList.add('on'); b.setAttribute('aria-pressed', 'true'); curF = b.dataset.f; applyCerts();
     });
   });
+  sInput.addEventListener('input', applyCerts);
+
+  /* ===== PRATINJAU SERTIFIKAT ===== */
+  var lb = $('#lb'), lbImg = $('#lbImg'), cur = null;
+  function shown() { return cards.filter(function (c) { return !c.classList.contains('hide'); }); }
+  function openLb(card) {
+    cur = card;
+    lbImg.src = 'sertifikat/preview/' + card.dataset.slug + '.jpg';
+    lbImg.alt = 'Sertifikat ' + card.dataset.name;
+    $('#lbTitle').textContent = card.dataset.name;
+    $('#lbMeta').textContent = card.dataset.date + ' · ' + card.dataset.tag;
+    var pdf = 'sertifikat/pdf/' + card.dataset.slug + '.pdf';
+    $('#lbOpen').href = pdf; $('#lbDl').href = pdf; $('#lbDl').setAttribute('download', card.dataset.dl);
+    if (!lb.open) { lb.showModal(); document.body.classList.add('is-locked'); }
+  }
+  function step(d) { var l = shown(); if (!l.length) return; openLb(l[(l.indexOf(cur) + d + l.length) % l.length]); }
+  cards.forEach(function (c) { $('.cc-view', c).addEventListener('click', function () { openLb(c); }); });
+  $$('[data-open]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var c = cards.filter(function (x) { return x.dataset.slug === b.dataset.open; })[0];
+      if (c) { c.classList.remove('hide'); openLb(c); }
+    });
+  });
+  $('#lbPrev').addEventListener('click', function () { step(-1); });
+  $('#lbNext').addEventListener('click', function () { step(1); });
+  $('#lbClose').addEventListener('click', function () { lb.close(); });
+  lb.addEventListener('close', function () { document.body.classList.remove('is-locked'); });
+  lb.addEventListener('click', function (e) { if (e.target === lb || e.target.classList.contains('lb-box')) lb.close(); });
+  lb.addEventListener('keydown', function (e) { if (e.key === 'ArrowLeft') step(-1); if (e.key === 'ArrowRight') step(1); });
+
+  /* ===== CETAK ===== */
+  $('#printBtn').addEventListener('click', function () { window.print(); });
 
   /* ===== SALIN EMAIL ===== */
   var copyBtn = $('#copyBtn'), copyTxt = $('#copyTxt');

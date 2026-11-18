@@ -41,3 +41,10 @@ sertifikat/
 
 - Menambah sertifikat juga butuh gambar besar di `sertifikat/preview/NAMA.jpg` dan atribut `data-slug`, `data-name`, `data-date`, `data-tag`, `data-q`, `data-dl` pada `<li>`.
 - Cetak / simpan PDF: tombol di bagian Kontak memakai gaya cetak khusus.
+
+## Dokumentasi proyek
+
+- Foto tampilan tiap proyek ada di `assets/img/proyek/<nama-proyek>/` (`NAMA.jpg` ukuran penuh dan `NAMA-t.jpg` thumbnail).
+- Keterangan di bawah tiap foto ditulis di `index.html`, pada tombol `<button class="shot" ...>` di dalam `<div class="gallery">` setiap proyek.
+- Surat Pencatatan Ciptaan Pizzas.id: `assets/dokumen/surat-pencatatan-ciptaan-pizzas-id.pdf`. Alamat pada salinan ini sudah disamarkan. Jangan menggantinya dengan PDF asli sebelum Anda yakin ingin menampilkan alamat tersebut ke publik.
+- Urutan proyek: 1 Absensi Coffee ID (skripsi), 2 Pizzas.id (penulisan ilmiah / sempro), 3 CoffeePlace, 4 PolaSehat, 5 AI Agent.

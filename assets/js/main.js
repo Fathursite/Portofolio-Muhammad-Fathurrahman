@@ -183,26 +183,35 @@
   });
   sInput.addEventListener('input', applyCerts);
 
-  /* ===== PRATINJAU SERTIFIKAT ===== */
-  var lb = $('#lb'), lbImg = $('#lbImg'), cur = null;
+  /* ===== PRATINJAU (sertifikat, tangkapan layar, hak cipta) ===== */
+  var lb = $('#lb'), lbImg = $('#lbImg'), list = [], pos = 0;
   function shown() { return cards.filter(function (c) { return !c.classList.contains('hide'); }); }
-  function openLb(card) {
-    cur = card;
-    lbImg.src = 'sertifikat/preview/' + card.dataset.slug + '.jpg';
-    lbImg.alt = 'Sertifikat ' + card.dataset.name;
-    $('#lbTitle').textContent = card.dataset.name;
-    $('#lbMeta').textContent = card.dataset.date + ' · ' + card.dataset.tag;
-    var pdf = 'sertifikat/pdf/' + card.dataset.slug + '.pdf';
-    $('#lbOpen').href = pdf; $('#lbDl').href = pdf; $('#lbDl').setAttribute('download', card.dataset.dl);
+  function info(el) {
+    if (el.classList.contains('cc')) {
+      var p = 'sertifikat/pdf/' + el.dataset.slug + '.pdf';
+      return { img: 'sertifikat/preview/' + el.dataset.slug + '.jpg', t: el.dataset.name, m: el.dataset.date + ' · ' + el.dataset.tag, open: p, dl: p, dn: el.dataset.dl, alt: 'Sertifikat ' + el.dataset.name };
+    }
+    return { img: el.dataset.full, t: el.dataset.title, m: el.dataset.meta, open: el.dataset.pdf || el.dataset.full, dl: el.dataset.pdf || '', dn: el.dataset.dn || '', alt: el.dataset.title };
+  }
+  function openAt(l, i) {
+    list = l; pos = i; var it = info(l[i]);
+    lbImg.src = it.img; lbImg.alt = it.alt;
+    $('#lbTitle').textContent = it.t; $('#lbMeta').textContent = it.m;
+    $('#lbOpen').href = it.open;
+    var d = $('#lbDl'); d.hidden = !it.dl; if (it.dl) { d.href = it.dl; d.setAttribute('download', it.dn); }
+    $('#lbPrev').hidden = $('#lbNext').hidden = l.length < 2;
     if (!lb.open) { lb.showModal(); document.body.classList.add('is-locked'); }
   }
-  function step(d) { var l = shown(); if (!l.length) return; openLb(l[(l.indexOf(cur) + d + l.length) % l.length]); }
-  cards.forEach(function (c) { $('.cc-view', c).addEventListener('click', function () { openLb(c); }); });
+  function step(d) { if (list.length) openAt(list, (pos + d + list.length) % list.length); }
+  cards.forEach(function (c) { $('.cc-view', c).addEventListener('click', function () { var l = shown(); openAt(l, l.indexOf(c)); }); });
   $$('[data-open]').forEach(function (b) {
     b.addEventListener('click', function () {
       var c = cards.filter(function (x) { return x.dataset.slug === b.dataset.open; })[0];
-      if (c) { c.classList.remove('hide'); openLb(c); }
+      if (c) { c.classList.remove('hide'); var l = shown(); openAt(l, l.indexOf(c)); }
     });
+  });
+  $$('.shot').forEach(function (b) {
+    b.addEventListener('click', function () { var l = $$('.shot', b.closest('.gallery,.hki')); openAt(l, l.indexOf(b)); });
   });
   $('#lbPrev').addEventListener('click', function () { step(-1); });
   $('#lbNext').addEventListener('click', function () { step(1); });

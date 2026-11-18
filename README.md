@@ -44,7 +44,11 @@ sertifikat/
 
 ## Dokumentasi proyek
 
-- Foto tampilan tiap proyek ada di `assets/img/proyek/<nama-proyek>/` (`NAMA.jpg` ukuran penuh dan `NAMA-t.jpg` thumbnail).
-- Keterangan di bawah tiap foto ditulis di `index.html`, pada tombol `<button class="shot" ...>` di dalam `<div class="gallery">` setiap proyek.
+Bagian **Proyek pilihan** menampilkan semua proyek langsung (tanpa tombol buka-tutup). Tiap proyek berisi judul, status, deskripsi, teknologi, lalu **Dokumentasi Tampilan** yang dikelompokkan per bagian (mis. Sisi pelanggan, Pembayaran dan struk, Panel admin).
+
+- Foto ada di `assets/img/proyek/<nama-proyek>/`: `NAMA.jpg` (ukuran penuh) dan `NAMA-t.jpg` (thumbnail).
+- Untuk mengubah keterangan foto, cari `<button class="shot" ...>` di `index.html` (judul pada `<strong>`, keterangan pada `<small>`).
+- Untuk menambah foto, salin satu blok `<button class="shot">` ke grup yang sesuai, lalu taruh gambarnya di folder proyek.
 - Surat Pencatatan Ciptaan Pizzas.id: `assets/dokumen/surat-pencatatan-ciptaan-pizzas-id.pdf`. Alamat pada salinan ini sudah disamarkan. Jangan menggantinya dengan PDF asli sebelum Anda yakin ingin menampilkan alamat tersebut ke publik.
 - Urutan proyek: 1 Absensi Coffee ID (skripsi), 2 Pizzas.id (penulisan ilmiah / sempro), 3 CoffeePlace, 4 PolaSehat, 5 AI Agent.
+- Setelah mengunggah versi baru, tekan Ctrl+F5 agar browser memuat CSS dan JS terbaru (tautan sudah memakai `?v=3`).

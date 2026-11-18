@@ -129,28 +129,6 @@
   onScroll();
   upBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
 
-  /* ===== AKORDEON PROYEK ===== */
-  $$('.proj').forEach(function (card) {
-    var btn = $('.proj-head', card), body = $('.proj-body', card);
-    btn.addEventListener('click', function () {
-      var wasOpen = card.classList.contains('open');
-      $$('.proj.open').forEach(function (o) {
-        o.classList.remove('open');
-        $('.proj-body', o).style.maxHeight = '0px';
-        $('.proj-head', o).setAttribute('aria-expanded', 'false');
-      });
-      if (!wasOpen) {
-        card.classList.add('open');
-        body.style.maxHeight = body.scrollHeight + 'px';
-        btn.setAttribute('aria-expanded', 'true');
-      }
-    });
-  });
-  window.addEventListener('resize', function () {
-    var o = $('.proj.open .proj-body');
-    if (o) o.style.maxHeight = o.scrollHeight + 'px';
-  });
-
   /* ===== MENU MOBILE ===== */
   var burger = $('#burger'), sheet = $('#sheet');
   function toggleSheet(force) {
@@ -211,7 +189,7 @@
     });
   });
   $$('.shot').forEach(function (b) {
-    b.addEventListener('click', function () { var l = $$('.shot', b.closest('.gallery,.hki')); openAt(l, l.indexOf(b)); });
+    b.addEventListener('click', function () { var l = $$('.shot', b.closest('.pj')); openAt(l, l.indexOf(b)); });
   });
   $('#lbPrev').addEventListener('click', function () { step(-1); });
   $('#lbNext').addEventListener('click', function () { step(1); });
